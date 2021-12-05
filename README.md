@@ -39,6 +39,14 @@ GET ALL FILM
 
 `https://localhost:8000/showcase` method="GET"
 
+GET ALL FILM SORTED BY YEAR ASCENDING
+
+`https://localhost:8000/showcase/year_ascending` method="GET"
+
+GET ALL FILM SORTED BY YEAR DESCENDING
+
+`https://localhost:8000/showcase/year_descending` method="GET"
+
 POST FILM
 
 `https://localhost:8000/showcase` method="POST"
@@ -53,4 +61,4 @@ ADD DISLIKE
 
 DELETE FILM
 
-`https://localhost:8000/showcase/id/delete` method="DELETE"
+`https://localhost:8000/showcase/id` method="DELETE"
