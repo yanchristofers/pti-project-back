@@ -34,3 +34,23 @@ Run server
 
 `git push origin <branch name>`
 
+## API Docs 
+GET ALL FILM
+
+`https://localhost:8000/showcase` method="GET"
+
+POST FILM
+
+`https://localhost:8000/showcase` method="POST"
+
+ADD LIKE
+
+`https://localhost:8000/showcase/id/like` method="PUT"
+
+ADD DISLIKE
+
+`https://localhost:8000/showcase/id/dislike` method="PUT"
+
+DELETE FILM
+
+`https://localhost:8000/showcase/id/delete` method="DELETE"
