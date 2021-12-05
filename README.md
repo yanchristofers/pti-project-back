@@ -11,6 +11,9 @@
 
 `git clone`
 
+`git checkout -b "<branch_name>"`
+
+
 Install modules
 
 `pip install -r requirements.txt`
@@ -21,11 +24,13 @@ Run server
 
 ## Contributing
 
+
 `git pull origin main`
+
 
 `git add .`
 
 `git commit -m "<message>"`
 
-`git push origin main`
+`git push origin <branch name>`
 
