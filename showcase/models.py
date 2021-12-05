@@ -5,5 +5,6 @@ class Film(models.Model):
     title = models.CharField(max_length=200)
     imageUrl = models.CharField(max_length=1000)
     trailerUrl = models.CharField(max_length=1000)
+    like=models.IntegerField(max_length=100000)
     genre = models.CharField(max_length=200)
-    released_date = models.CharField(max_length=2000)
+    released_year = models.IntegerField(max_length=2000)
