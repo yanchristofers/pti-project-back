@@ -5,19 +5,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Film
 from .serializers import FilmAllSerializer,FilmDetailSerializer
+from rest_framework import filters,generics
+
 # Create your views here.
-
 class FilmList(APIView):
+
+    
     def get(self,request):
-        #TODO Implement sort by like, implement sort descending and ascending released year
-        film = Film.objects.all()
-       
-        serializers = FilmAllSerializer(film, many=True)
 
-        return Response({"status" : 200,
-            "message" : "Success",
-            "data":serializers.data})
-
+            film = Film.objects.all()
+            serializers = FilmAllSerializer(film, many=True)
+            return Response({"status" : 200,
+                "message" : "Success",
+                "data":serializers.data})
+            
     def post(self,request):
 
         film = Film.objects.all()      
@@ -50,23 +51,23 @@ class FilmList(APIView):
 
 
         
+class FilmSort(APIView):
+    def get(self,request,sort):
 
-class FilmDetail(APIView):
-    def get(self, request, id):
-        #TODO Implement get by title
-        try :
-            film = Film.objects.get(id=id)
-            serializers = FilmDetailSerializer(film)
-        except Film.DoesNotExist :
-            return Response({
-                "error" : "buku tidak ditemukan"
-            })
-        return Response({
-            "status" : 200,
-            "message" : "get book success",
-            "data" : serializers.data
-        })
+            film = Film.objects.all()
+            serializers = FilmAllSerializer(film, many=True)
+            data = serializers.data
+            if sort == "year_ascending":
+                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=False)
+            elif sort == "year_descending":
+                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=True)
 
+            return Response({"status" : 200,
+                "message" : "Success",
+                "data":data})
+            
+
+class FilmLikeDislike(APIView):
     def put(self, request, id,action):
         try :
             film = Film.objects.get(id=id)
@@ -90,24 +91,34 @@ class FilmDetail(APIView):
             "message" : "update successfull",
             "data" : serializers.data
         })
-
-
-    def delete(self, request, id,action) :
+class FilmDetail(APIView):
+    def get(self, request, id):
+        #TODO Implement get by title
+        try :
+            film = Film.objects.get(id=id)
+            serializers = FilmDetailSerializer(film)
+        except Film.DoesNotExist :
+            return Response({
+                "error" : "buku tidak ditemukan"
+            })
+        return Response({
+            "status" : 200,
+            "message" : "get book success",
+            "data" : serializers.data
+        })
+    def delete(self, request, id) :
         try:
-            if action == "delete":
-                film = Film.objects.get(id=id)
-                film.delete()
+            
+            film = Film.objects.get(id=id)
+            film.delete()
 
-                return Response({
-                    "status" : 201,
-                    "message" : "delete success",
-                })
-            else:
-                return Response({
-                    "status" : 204,
-                    "message" : "/delete is required",
-                })
+            return Response({
+                "status" : 201,
+                "message" : "delete success",
+            })
         except Film.DoesNotExist:
             return Response({
                 "error" : "film tidak ditemukan"
             })
+    
+    
