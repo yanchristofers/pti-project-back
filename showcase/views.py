@@ -5,18 +5,31 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Film
 from .serializers import FilmAllSerializer,FilmDetailSerializer
+from rest_framework import filters,generics
+
 # Create your views here.
 
 class FilmList(APIView):
-    def get(self,request):
-        #TODO Implement sort by like, implement sort descending and ascending released year
-        film = Film.objects.all()
-       
-        serializers = FilmAllSerializer(film, many=True)
 
-        return Response({"status" : 200,
-            "message" : "Success",
-            "data":serializers.data})
+    
+    def get(self,request,sort):
+
+            film = Film.objects.all()
+            serializers = FilmAllSerializer(film, many=True)
+            data = serializers.data
+            if sort == "all":
+                data = serializers.data
+            elif sort == "year_ascending":
+                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=False)
+            elif sort == "year_descending":
+                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=True)
+
+            return Response({"status" : 200,
+                "message" : "Success",
+                "data":data})
+            
+
+        
 
     def post(self,request):
 
