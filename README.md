@@ -37,28 +37,28 @@ Run server
 ## API Docs 
 GET ALL FILM
 
-`https://localhost:8000/showcase` method="GET"
+`https://pti-final-project-be.herokuapp.com` method="GET"
 
 GET ALL FILM SORTED BY YEAR ASCENDING
 
-`https://localhost:8000/showcase/year_ascending` method="GET"
+`https://pti-final-project-be.herokuapp.com/year_ascending` method="GET"
 
 GET ALL FILM SORTED BY YEAR DESCENDING
 
-`https://localhost:8000/showcase/year_descending` method="GET"
+`https://pti-final-project-be.herokuapp.com/year_descending` method="GET"
 
 POST FILM
 
-`https://localhost:8000/showcase` method="POST"
+`https://pti-final-project-be.herokuapp.com/` method="POST"
 
 ADD LIKE
 
-`https://localhost:8000/showcase/id/like` method="PUT"
+`https://pti-final-project-be.herokuapp.com/id/like` method="PUT"
 
 ADD DISLIKE
 
-`https://localhost:8000/showcase/id/dislike` method="PUT"
+`https://pti-final-project-be.herokuapp.com/id/dislike` method="PUT"
 
 DELETE FILM
 
-`https://localhost:8000/showcase/id` method="DELETE"
+`https://pti-final-project-be.herokuapp.com/id` method="DELETE"
