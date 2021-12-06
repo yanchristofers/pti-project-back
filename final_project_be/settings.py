@@ -121,6 +121,7 @@ USE_TZ = True
 ALLOWED_HOSTS=['*']
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'https://pticinema.vercel.app'
 ]
 CORS_ORIGIN_ALLOW = True
 # Static files (CSS, JavaScript, Images)
