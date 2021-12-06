@@ -48,8 +48,13 @@ class FilmList(APIView):
             return Response({
                 "status" : 204,
         "message" : "Success no data, existed film"})
+        
 
-
+class FilmSearchFilter(generics.ListAPIView):
+    queryset = Film.objects.all()
+    serializer_class = FilmAllSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title']
         
 class FilmSort(APIView):
     def get(self,request,sort):
