@@ -47,6 +47,10 @@ GET ALL FILM SORTED BY YEAR DESCENDING
 
 `https://pti-final-project-be.herokuapp.com/year_descending` method="GET"
 
+GET FILM BY TITLE
+
+`https://pti-final-project-be.herokuapp.com/search/?search=<title>` method="GET"
+
 POST FILM
 
 `https://pti-final-project-be.herokuapp.com/` method="POST"
