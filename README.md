@@ -41,11 +41,11 @@ GET ALL FILM
 
 GET ALL FILM SORTED BY YEAR ASCENDING
 
-`https://pti-final-project-be.herokuapp.com/year_ascending` method="GET"
+`https://pti-final-project-be.herokuapp.com?sort=year_ascending` method="GET"
 
 GET ALL FILM SORTED BY YEAR DESCENDING
 
-`https://pti-final-project-be.herokuapp.com/year_descending` method="GET"
+`https://pti-final-project-be.herokuapp.com?sort=year_descending` method="GET"
 
 GET FILM BY TITLE
 
