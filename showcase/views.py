@@ -14,6 +14,13 @@ class FilmList(APIView):
     def get(self,request):
 
             film = Film.objects.all()
+            sort = request.GET.get("sort",None)
+            print(sort)
+            if sort == "year_ascending":
+                film = Film.objects.all().order_by("released_year")
+            elif sort == "year_descending":
+                film = Film.objects.all().order_by("-released_year")
+            
             serializers = FilmAllSerializer(film, many=True)
             return Response({"status" : 200,
                 "message" : "Success",
@@ -56,22 +63,6 @@ class FilmSearchFilter(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['title']
         
-class FilmSort(APIView):
-    def get(self,request,sort):
-
-            film = Film.objects.all()
-            serializers = FilmAllSerializer(film, many=True)
-            data = serializers.data
-            if sort == "year_ascending":
-                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=False)
-            elif sort == "year_descending":
-                data = sorted(serializers.data, key=lambda data: data["released_year"], reverse=True)
-
-            return Response({"status" : 200,
-                "message" : "Success",
-                "data":data})
-            
-
 class FilmLikeDislike(APIView):
     def put(self, request, id,action):
         try :
@@ -104,11 +95,11 @@ class FilmDetail(APIView):
             serializers = FilmDetailSerializer(film)
         except Film.DoesNotExist :
             return Response({
-                "error" : "buku tidak ditemukan"
+                "error" : "film tidak ditemukan"
             })
         return Response({
             "status" : 200,
-            "message" : "get book success",
+            "message" : "get film success",
             "data" : serializers.data
         })
     def delete(self, request, id) :
