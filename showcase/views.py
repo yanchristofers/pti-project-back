@@ -5,6 +5,8 @@ from .serializers import FilmAllSerializer
 from rest_framework import filters,generics
 from rest_framework import generics
 from rest_framework import status
+from django.http import HttpResponse
+from django.views.generic import View
 
 # Create your views here.
 
@@ -118,7 +120,36 @@ class FilmGenreDetail(APIView):
         return Response({"status" : 200,
             "message" : "Success",
             "data":serializers.data})
-    
+
+
+class GenreFilm:
+    model = Film
+
+    def get_most_popular(self):
+        genre_list = self.model.objects.values_list('genre', flat=True).distinct()
+        queryset = []
+
+        for genres in genre_list:
+            artikels = self.model.objects.filter(genre=genres).order_by('-like')
+            queryset.append(artikels)
+        return queryset
+
+
+class MostLikesFilm(APIView, GenreFilm):
+    def get(self, request):
+        Data = Film.objects.all()
+        Films = Film.objects.values_list('genre', flat=True).distinct()
+        queryset = []
+        datas = self.get_latest_artikel()
+
+        for genres in Films:
+            artikels = Film.objects.filter(genre=genres).order_by('-like')
+            queryset.append(artikels)
+
+        serializers = FilmAllSerializer(Data, many=True)
+        return Response({"status" : 200,
+            "message" : "Success",
+            "data":serializers.data})
 
 
 class FilmDetail(APIView):
