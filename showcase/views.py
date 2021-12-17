@@ -12,11 +12,16 @@ class FilmSearchFilter(generics.ListAPIView):
 
     serializer_class = FilmAllSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title']
+    search_fields = ['genre']
     
 
     def get_queryset(self):
-        return Film.objects.all()
+        query = Film.objects.all()
+        if self.request.GET.get('sortBy') == 'likes':
+            query = Film.objects.all().order_by("-like")
+        elif self.request.GET.get('sortBy') == 'dislikes':
+            query = Film.objects.all().order_by("-dislike")
+        return query
 
 class FilmList(APIView):
     
@@ -99,6 +104,22 @@ class FilmLikeDislike(APIView):
             "message" : "update successfull",
             "data" : serializers.data
         })
+
+class FilmGenreDetail(APIView):
+     def get(self,request, genre):
+        if self.request.GET.get('sortby') == 'likes':
+            Films = Film.objects.filter(genre=genre).order_by("-like")
+        elif self.request.GET.get('sortby') == 'dislikes':
+            Films = Film.objects.filter(genre=genre).order_by("-dislike")
+        else:
+            Films = Film.objects.filter(genre=genre)
+        
+        serializers = FilmAllSerializer(Films, many=True)
+        return Response({"status" : 200,
+            "message" : "Success",
+            "data":serializers.data})
+    
+
 
 class FilmDetail(APIView):
 
