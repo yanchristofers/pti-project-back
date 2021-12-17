@@ -6,7 +6,3 @@ class FilmAllSerializer(serializers.ModelSerializer):
         model = Film
         fields = ['id', 'title', 'imageUrl', 'trailerUrl','like','dislike','genre','released_year']
 
-class FilmDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Film
-        fields = ['id', 'title', 'imageUrl', 'trailerUrl','like','dislike','genre','released_year']

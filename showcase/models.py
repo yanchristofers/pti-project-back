@@ -9,3 +9,7 @@ class Film(models.Model):
     dislike=models.IntegerField(default=0)
     genre = models.CharField(max_length=200)
     released_year = models.IntegerField()
+
+
+    def __str__(self):
+        return self.title
