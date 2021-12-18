@@ -1,4 +1,3 @@
-from django.views import generic
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Film
@@ -6,9 +5,7 @@ from .serializers import FilmAllSerializer
 from rest_framework import filters,generics
 from rest_framework import generics
 from rest_framework import status
-from django.http import HttpResponse
-from django.views.generic import View
-from django.db.models import Max, Min
+from django.db.models import Min
 # Create your views here.
 
 class FilmSearchFilter(generics.ListAPIView):
@@ -26,7 +23,7 @@ class FilmList(APIView):
         Data_Genre = Film.objects.all().aggregate(Min('like'))
         for key, value in Data_Genre.items():
             if self.request.GET.get('sortby') == 'mostPopular':
-                Films = Film.objects.filter(like__gt=value)
+                Films = Film.objects.filter(like__gt=value).order_by('-like')
             elif self.request.GET.get('sortby') == 'likes':
                 Films = Film.objects.all().order_by("-likes")
             elif self.request.GET.get('sortby') == 'dislikes':
@@ -65,13 +62,15 @@ class FilmList(APIView):
             )
             serializers = FilmAllSerializer(film)
             return Response({"status" : 201,
-        "message" : "Created",
-        "data":serializers.data})
+                            "message" : "Created",
+                            "data":serializers.data
+                            })
 
         else:
             return Response({
                 "status" : 204,
-        "message" : "Success no data, existed film"})
+                "message" : "Success no data, existed film"
+                })
         
 
         
