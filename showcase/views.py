@@ -20,15 +20,13 @@ class FilmSearchFilter(generics.ListAPIView):
     def get_queryset(self):
         return Film.objects.all()
 
-
-
 class FilmList(APIView):
     
     def get(self,request):
-        Data1 = Film.objects.all().aggregate(Min('like'))
-        for k, v in Data1.items():
+        Data_Genre = Film.objects.all().aggregate(Min('like'))
+        for key, value in Data_Genre.items():
             if self.request.GET.get('sortby') == 'mostPopular':
-                Films = Film.objects.filter(like__gt=v)
+                Films = Film.objects.filter(like__gt=value)
             elif self.request.GET.get('sortby') == 'likes':
                 Films = Film.objects.all().order_by("-likes")
             elif self.request.GET.get('sortby') == 'dislikes':
