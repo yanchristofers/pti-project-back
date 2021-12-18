@@ -25,7 +25,7 @@ class FilmList(APIView):
             if self.request.GET.get('sortby') == 'mostPopular':
                 Films = Film.objects.filter(like__gt=value).order_by('-like')
             elif self.request.GET.get('sortby') == 'likes':
-                Films = Film.objects.all().order_by("-likes")
+                Films = Film.objects.all().order_by("-like")
             elif self.request.GET.get('sortby') == 'dislikes':
                 Films = Film.objects.all().order_by("-dislike")
             elif self.request.GET.get('sortby') == "year_ascending":
