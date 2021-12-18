@@ -1,3 +1,4 @@
+from django.views import generic
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Film
@@ -7,37 +8,37 @@ from rest_framework import generics
 from rest_framework import status
 from django.http import HttpResponse
 from django.views.generic import View
-
+from django.db.models import Max, Min
 # Create your views here.
 
 class FilmSearchFilter(generics.ListAPIView):
 
     serializer_class = FilmAllSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['genre']
+    search_fields = ['title']
     
-
     def get_queryset(self):
-        query = Film.objects.all()
-        if self.request.GET.get('sortBy') == 'likes':
-            query = Film.objects.all().order_by("-like")
-        elif self.request.GET.get('sortBy') == 'dislikes':
-            query = Film.objects.all().order_by("-dislike")
-        return query
+        return Film.objects.all()
+
+
 
 class FilmList(APIView):
     
     def get(self,request):
-        if self.request.GET.get('sortby') == 'likes':
-            Films = Film.objects.all().order_by("-like")
-        elif self.request.GET.get('sortby') == 'dislikes':
-            Films = Film.objects.all().order_by("-dislike")
-        elif self.request.GET.get('sortby') == "year_ascending":
-            Films = Film.objects.all().order_by("-released_year")
-        elif self.request.GET.get('sortby') == "year_descending":
-            Films = Film.objects.all().order_by("released_year")
-        else :
-            Films = Film.objects.all()
+        Data1 = Film.objects.all().aggregate(Min('like'))
+        for k, v in Data1.items():
+            if self.request.GET.get('sortby') == 'mostPopular':
+                Films = Film.objects.filter(like__gt=v)
+            elif self.request.GET.get('sortby') == 'likes':
+                Films = Film.objects.all().order_by("-likes")
+            elif self.request.GET.get('sortby') == 'dislikes':
+                Films = Film.objects.all().order_by("-dislike")
+            elif self.request.GET.get('sortby') == "year_ascending":
+                Films = Film.objects.all().order_by("-released_year")
+            elif self.request.GET.get('sortby') == "year_descending":
+                Films = Film.objects.all().order_by("released_year")
+            else :
+                Films = Film.objects.all()
         
         serializers = FilmAllSerializer(Films, many=True)
         return Response({"status" : 200,
@@ -117,36 +118,6 @@ class FilmGenreDetail(APIView):
             Films = Film.objects.filter(genre=genre)
         
         serializers = FilmAllSerializer(Films, many=True)
-        return Response({"status" : 200,
-            "message" : "Success",
-            "data":serializers.data})
-
-
-class GenreFilm:
-    model = Film
-
-    def get_most_popular(self):
-        genre_list = self.model.objects.values_list('genre', flat=True).distinct()
-        queryset = []
-
-        for genres in genre_list:
-            artikels = self.model.objects.filter(genre=genres).order_by('-like')
-            queryset.append(artikels)
-        return queryset
-
-
-class MostLikesFilm(APIView, GenreFilm):
-    def get(self, request):
-        Data = Film.objects.all()
-        Films = Film.objects.values_list('genre', flat=True).distinct()
-        queryset = []
-        datas = self.get_latest_artikel()
-
-        for genres in Films:
-            artikels = Film.objects.filter(genre=genres).order_by('-like')
-            queryset.append(artikels)
-
-        serializers = FilmAllSerializer(Data, many=True)
         return Response({"status" : 200,
             "message" : "Success",
             "data":serializers.data})
